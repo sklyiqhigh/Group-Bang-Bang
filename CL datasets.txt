@@ -1,0 +1,79 @@
+!pip install datasets
+
+from datasets import load_dataset
+
+# Load the dataset as a test
+ds = load_dataset("sepidmnorozy/Cantonese_sentiment")
+print(ds)
+
+
+# Display dataset splits
+print(ds)
+
+# Check the first few entries in the training set
+print("\nSample data from the training set:")
+print(ds['train'][:5])
+
+# Check column names and features
+print("\nColumn names in the dataset:")
+print(ds['train'].column_names)
+
+
+# Convert the training set to a pandas DataFrame and save
+import pandas as pd
+
+train_df = pd.DataFrame(ds['train'])
+train_df.to_csv("cantonese_sentiment_train.csv", index=False)
+
+print("Training set saved to 'cantonese_sentiment_train.csv'.")
+
+
+# View dataset structure
+print(ds)
+
+# Display a sample from each split
+print("\nSample from the training set:")
+print(ds['train'][0])
+
+print("\nSample from the validation set:")
+print(ds['validation'][0])
+
+print("\nSample from the test set:")
+print(ds['test'][0])
+
+
+# Import library
+import matplotlib.pyplot as plt
+
+# Get label distribution for training set
+labels = [example['label'] for example in ds['train']]
+label_counts = Counter(labels)
+
+# Plot label distribution
+plt.bar(label_counts.keys(), label_counts.values())
+plt.title("Sentiment Distribution in Training Set")
+plt.xlabel("Sentiment Label")
+plt.ylabel("Count")
+plt.show()
+
+
+# Example text preprocessing function
+def preprocess_text(text):
+    # Lowercasing and removing surrounding whitespace
+    return text.lower().strip()
+
+# Apply preprocessing to the training set
+ds = ds.map(lambda x: {"text": preprocess_text(x["text"])})
+
+# View preprocessed example
+print("\nPreprocessed example:")
+print(ds['train'][0])
+
+
+# Save training set to a CSV file
+import pandas as pd
+
+train_df = pd.DataFrame(ds['train'])
+train_df.to_csv("cantonese_sentiment_train.csv", index=False)
+
+print("Training set saved to 'cantonese_sentiment_train.csv'.")
